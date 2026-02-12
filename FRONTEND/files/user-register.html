@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroShop - User Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .logo::before {
+            content: "⚡";
+            margin-right: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .register-form {
+            padding: 40px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            user-select: none;
+            font-size: 20px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .toggle-password:hover {
+            opacity: 1;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+            background: #ccc;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #ff6b6b;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #feca57;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: #1dd1a1;
+        }
+
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .requirement.met {
+            color: #1dd1a1;
+        }
+
+        .requirement.met::before {
+            content: "✓";
+        }
+
+        .requirement.unmet::before {
+            content: "○";
+            color: #ccc;
+        }
+
+        .terms-agreement {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .terms-agreement input[type="checkbox"] {
+            width: auto;
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .terms-agreement label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .terms-agreement a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .terms-agreement a:hover {
+            text-decoration: underline;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .register-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider::before {
+            margin-right: 15px;
+        }
+
+        .divider::after {
+            margin-left: 15px;
+        }
+
+        .social-register {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #1e3c72;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo">ElectroShop</div>
+            <div class="subtitle">Create your account</div>
+        </div>
+
+        <div class="register-form">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" placeholder="John" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" placeholder="Doe" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="john.doe@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" placeholder="Create a strong password" required>
+                    <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+                </div>
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="strengthBar"></div>
+                </div>
+                <div class="password-requirements">
+                    <div class="requirement unmet" id="req-length">At least 8 characters</div>
+                    <div class="requirement unmet" id="req-uppercase">One uppercase letter</div>
+                    <div class="requirement unmet" id="req-number">One number</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmPassword" placeholder="Re-enter your password" required>
+                    <span class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</span>
+                </div>
+            </div>
+
+            <div class="terms-agreement">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">
+                    I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button class="register-btn" id="registerBtn" onclick="handleRegister()">Create Account</button>
+
+            <div class="divider">Or sign up with</div>
+
+            <div class="social-register">
+                <button class="social-btn" onclick="socialRegister('google')">
+                    <span>🔍</span> Google
+                </button>
+                <button class="social-btn" onclick="socialRegister('facebook')">
+                    <span>📘</span> Facebook
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="user-login.html">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleBtn = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strengthBar');
+            
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            
+            // Update requirements
+            document.getElementById('req-length').className = hasLength ? 'requirement met' : 'requirement unmet';
+            document.getElementById('req-uppercase').className = hasUppercase ? 'requirement met' : 'requirement unmet';
+            document.getElementById('req-number').className = hasNumber ? 'requirement met' : 'requirement unmet';
+            
+            // Calculate strength
+            const requirements = [hasLength, hasUppercase, hasNumber].filter(Boolean).length;
+            
+            strengthBar.className = 'password-strength-bar';
+            if (requirements === 1) {
+                strengthBar.classList.add('weak');
+            } else if (requirements === 2) {
+                strengthBar.classList.add('medium');
+            } else if (requirements === 3) {
+                strengthBar.classList.add('strong');
+            }
+            
+            return requirements === 3;
+        }
+
+        document.getElementById('password').addEventListener('input', checkPasswordStrength);
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 4000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 4000);
+        }
+
+        function handleRegister() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const termsAccepted = document.getElementById('terms').checked;
+
+            // Validation
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                showError('Please fill in all required fields');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            if (!checkPasswordStrength()) {
+                showError('Password does not meet requirements');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+
+            if (!termsAccepted) {
+                showError('Please accept the Terms of Service and Privacy Policy');
+                return;
+            }
+
+            // Simulate registration (replace with actual API call)
+            console.log('Registration attempt:', { firstName, lastName, email, phone });
+            
+            showSuccess('Account created successfully! Redirecting to login...');
+            
+            // Redirect to login after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'user-login.html';
+            }, 2000);
+        }
+
+        function socialRegister(provider) {
+            console.log('Social registration with:', provider);
+            showSuccess(`Connecting to ${provider}...`);
+            // Implement social registration logic here
+        }
+    </script>
+</body>
+</html>

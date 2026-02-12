@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroShop - Premium Electric Devices</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-button {
+            background: white;
+            color: #1e3c72;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cart-count {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            padding: 20px 40px;
+            background: #f8f9fa;
+            overflow-x: auto;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .add-to-cart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .wishlist-btn {
+            background: white;
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            width: 50px;
+        }
+
+        .wishlist-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .wishlist-btn.active {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 16px;
+        }
+
+        .rating-count {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .cart-items {
+            padding: 20px 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .qty-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .remove-item {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .cart-footer {
+            padding: 20px 30px;
+            border-top: 2px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .checkout-btn:hover {
+            opacity: 0.9;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .search-bar {
+            padding: 20px 40px;
+            background: white;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+        }
+
+        .checkout-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+        }
+
+        .form-group input.error {
+            border-color: #ff6b6b;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .wishlist-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .wishlist-header-btn {
+            background: white;
+            color: #ff6b6b;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .wishlist-header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                ⚡ ElectroShop
+            </div>
+            <div class="header-buttons">
+                <a href="admin-dashboard.html" class="wishlist-header-btn" style="text-decoration: none;">
+                    🔧 Admin
+                </a>
+                <button class="wishlist-header-btn" onclick="toggleWishlist()">
+                    ❤️ Wishlist
+                    <span class="cart-count" id="wishlistCount">0</span>
+                </button>
+                <button class="cart-button" onclick="toggleCart()">
+                    🛒 Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for devices...">
+        </div>
+
+        <div class="categories" id="categories"></div>
+
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-cart" onclick="toggleCart()">×</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">$0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-modal" id="wishlistModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>My Wishlist ❤️</h2>
+                <button class="close-cart" onclick="toggleWishlist()">×</button>
+            </div>
+            <div class="cart-items" id="wishlistItems"></div>
+        </div>
+    </div>
+
+    <div class="cart-modal" id="checkoutModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Checkout</h2>
+                <button class="close-cart" onclick="closeCheckout()">×</button>
+            </div>
+            <form class="checkout-form" id="checkoutForm" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="fullName" required>
+                    <span class="error-message" id="fullNameError">Please enter your full name</span>
+                </div>
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="email" required>
+                    <span class="error-message" id="emailError">Please enter a valid email</span>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="phone" required>
+                    <span class="error-message" id="phoneError">Please enter a valid phone number</span>
+                </div>
+                <div class="form-group">
+                    <label>Shipping Address *</label>
+                    <input type="text" id="address" required>
+                    <span class="error-message" id="addressError">Please enter your address</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" id="city" required>
+                        <span class="error-message" id="cityError">Required</span>
+                    </div>
+                    <div class="form-group">
+                        <label>ZIP Code *</label>
+                        <input type="text" id="zip" required>
+                        <span class="error-message" id="zipError">Required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Card Number *</label>
+                    <input type="text" id="cardNumber" maxlength="19" required>
+                    <span class="error-message" id="cardNumberError">Please enter a valid card number</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry Date *</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
+                        <span class="error-message" id="expiryError">MM/YY</span>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV *</label>
+                        <input type="text" id="cvv" maxlength="3" required>
+                        <span class="error-message" id="cvvError">Required</span>
+                    </div>
+                </div>
+                <div class="cart-footer">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span id="checkoutTotal">$0.00</span>
+                    </div>
+                    <button type="submit" class="checkout-btn">Complete Purchase</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const defaultProducts = [
+            { id: 1, name: 'iPhone 15 Pro', category: 'Smartphones', price: 999, icon: '📱', rating: 4.8, reviews: 1234 },
+            { id: 2, name: 'Samsung Galaxy S24', category: 'Smartphones', price: 899, icon: '📱', rating: 4.7, reviews: 987 },
+            { id: 3, name: 'MacBook Pro 16"', category: 'Laptops', price: 2499, icon: '💻', rating: 4.9, reviews: 2341 },
+            { id: 4, name: 'Dell XPS 15', category: 'Laptops', price: 1799, icon: '💻', rating: 4.6, reviews: 876 },
+            { id: 5, name: 'iPad Air', category: 'Tablets', price: 599, icon: '📱', rating: 4.7, reviews: 1543 },
+            { id: 6, name: 'Samsung Smart TV 65"', category: 'TVs', price: 1299, icon: '📺', rating: 4.5, reviews: 654 },
+            { id: 7, name: 'Sony WH-1000XM5', category: 'Audio', price: 399, icon: '🎧', rating: 4.8, reviews: 2109 },
+            { id: 8, name: 'AirPods Pro 2', category: 'Audio', price: 249, icon: '🎧', rating: 4.6, reviews: 3421 },
+            { id: 9, name: 'Apple Watch Series 9', category: 'Wearables', price: 429, icon: '⌚', rating: 4.7, reviews: 1876 },
+            { id: 10, name: 'Dyson V15 Vacuum', category: 'Home Appliances', price: 649, icon: '🏠', rating: 4.5, reviews: 543 },
+            { id: 11, name: 'Ninja Air Fryer', category: 'Home Appliances', price: 129, icon: '🍳', rating: 4.6, reviews: 2345 },
+            { id: 12, name: 'Canon EOS R6', category: 'Cameras', price: 2499, icon: '📷', rating: 4.8, reviews: 432 },
+            { id: 13, name: 'PlayStation 5', category: 'Gaming', price: 499, icon: '🎮', rating: 4.9, reviews: 5678 },
+            { id: 14, name: 'Xbox Series X', category: 'Gaming', price: 499, icon: '🎮', rating: 4.8, reviews: 4321 },
+            { id: 15, name: 'Google Pixel 8 Pro', category: 'Smartphones', price: 899, icon: '📱', rating: 4.6, reviews: 765 },
+            { id: 16, name: 'LG OLED TV 55"', category: 'TVs', price: 1599, icon: '📺', rating: 4.9, reviews: 987 },
+            { id: 17, name: 'Bose QuietComfort', category: 'Audio', price: 349, icon: '🎧', rating: 4.7, reviews: 1234 },
+            { id: 18, name: 'Fitbit Charge 6', category: 'Wearables', price: 159, icon: '⌚', rating: 4.4, reviews: 890 },
+        ];
+
+        // Load products from localStorage (managed by admin) or use defaults
+        let products = JSON.parse(localStorage.getItem('electroshop_products')) || defaultProducts;
+
+        let cart = [];
+        let wishlist = [];
+        let currentCategory = 'All';
+
+        // Load from localStorage
+        function loadFromStorage() {
+            const savedCart = localStorage.getItem('electroshop_cart');
+            const savedWishlist = localStorage.getItem('electroshop_wishlist');
+            const savedProducts = localStorage.getItem('electroshop_products');
+            
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+            if (savedWishlist) {
+                wishlist = JSON.parse(savedWishlist);
+            }
+            if (savedProducts) {
+                products = JSON.parse(savedProducts);
+            } else {
+                // Save default products if none exist
+                localStorage.setItem('electroshop_products', JSON.stringify(defaultProducts));
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('electroshop_cart', JSON.stringify(cart));
+            localStorage.setItem('electroshop_wishlist', JSON.stringify(wishlist));
+        }
+
+        function getCategories() {
+            const categories = ['All', ...new Set(products.map(p => p.category))];
+            return categories;
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categories');
+            const categories = getCategories();
+            container.innerHTML = categories.map(cat => 
+                `<button class="category-btn ${cat === currentCategory ? 'active' : ''}" onclick="filterCategory('${cat}')">${cat}</button>`
+            ).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            renderCategories();
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productsGrid');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = products.filter(p => {
+                const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
+                const matchesSearch = p.name.toLowerCase().includes(searchTerm) || 
+                                     p.category.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+
+            container.innerHTML = filtered.map(product => {
+                const isInWishlist = wishlist.some(item => item.id === product.id);
+                const stars = '⭐'.repeat(Math.round(product.rating));
+                
+                return `
+                <div class="product-card">
+                    <div class="product-image">${product.icon}</div>
+                    <div class="rating">
+                        <div class="stars">${stars}</div>
+                        <span class="rating-count">(${product.reviews})</span>
+                    </div>
+                    <div class="product-category">${product.category}</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">$${product.price.toLocaleString()}</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="wishlist-btn ${isInWishlist ? 'active' : ''}" onclick="toggleWishlistItem(${product.id})">
+                            ${isInWishlist ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            saveToStorage();
+            updateCart();
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    saveToStorage();
+                    updateCart();
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveToStorage();
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('wishlistCount').textContent = wishlist.length;
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                document.getElementById('cartTotal').textContent = '$0.00';
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-image">${item.icon}</div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">$${item.price.toLocaleString()}</div>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleWishlist() {
+            const modal = document.getElementById('wishlistModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+            renderWishlist();
+        }
+
+        function toggleWishlistItem(productId) {
+            const product = products.find(p => p.id === productId);
+            const index = wishlist.findIndex(item => item.id === productId);
+            
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                wishlist.push(product);
+            }
+            
+            saveToStorage();
+            updateCart();
+            renderProducts();
+        }
+
+        function renderWishlist() {
+            const container = document.getElementById('wishlistItems');
+            
+            if (wishlist.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Your wishlist is empty</div>';
+                return;
+            }
+
+            container.innerHTML = wishlist.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-image">${item.icon}</div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">$${item.price.toLocaleString()}</div>
+                    </div>
+                    <button class="add-to-cart" onclick="addToCartFromWishlist(${item.id})" style="margin-right: 10px;">Add to Cart</button>
+                    <button class="remove-item" onclick="toggleWishlistItem(${item.id})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function addToCartFromWishlist(productId) {
+            addToCart(productId);
+            toggleWishlistItem(productId);
+        }
+
+        function showCheckoutForm() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkoutTotal').textContent = `$${total.toLocaleString()}`;
+            
+            toggleCart();
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+            document.getElementById('checkoutForm').reset();
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+        }
+
+        function validateForm() {
+            clearErrors();
+            let isValid = true;
+
+            const fullName = document.getElementById('fullName').value.trim();
+            if (fullName.length < 3) {
+                showError('fullName', 'Please enter your full name');
+                isValid = false;
+            }
+
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+
+            const phone = document.getElementById('phone').value.trim();
+            const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+            if (!phoneRegex.test(phone)) {
+                showError('phone', 'Please enter a valid phone number');
+                isValid = false;
+            }
+
+            const address = document.getElementById('address').value.trim();
+            if (address.length < 5) {
+                showError('address', 'Please enter a complete address');
+                isValid = false;
+            }
+
+            const city = document.getElementById('city').value.trim();
+            if (city.length < 2) {
+                showError('city', 'Please enter your city');
+                isValid = false;
+            }
+
+            const zip = document.getElementById('zip').value.trim();
+            if (zip.length < 3) {
+                showError('zip', 'Please enter a valid ZIP code');
+                isValid = false;
+            }
+
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            if (cardNumber.length < 13 || cardNumber.length > 19) {
+                showError('cardNumber', 'Please enter a valid card number');
+                isValid = false;
+            }
+
+            const expiry = document.getElementById('expiry').value.trim();
+            const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+            if (!expiryRegex.test(expiry)) {
+                showError('expiry', 'Please use MM/YY format');
+                isValid = false;
+            }
+
+            const cvv = document.getElementById('cvv').value.trim();
+            if (cvv.length < 3 || cvv.length > 4) {
+                showError('cvv', 'Please enter a valid CVV');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const error = document.getElementById(fieldId + 'Error');
+            field.classList.add('error');
+            error.textContent = message;
+            error.style.display = 'block';
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const customerName = document.getElementById('fullName').value;
+            
+            alert(`Thank you for your purchase, ${customerName}!\n\nOrder Total: $${total.toLocaleString()}\n\nYour order will be processed and shipped shortly.\n\nA confirmation email has been sent to ${document.getElementById('email').value}`);
+            
+            cart = [];
+            saveToStorage();
+            updateCart();
+            closeCheckout();
+        }
+
+        // Format card number as user types
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardInput = document.getElementById('cardNumber');
+            if (cardInput) {
+                cardInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\s/g, '');
+                    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                    e.target.value = formattedValue;
+                });
+            }
+
+            const expiryInput = document.getElementById('expiry');
+            if (expiryInput) {
+                expiryInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length >= 2) {
+                        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                    }
+                    e.target.value = value;
+                });
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('input', renderProducts);
+
+        // Initialize
+        loadFromStorage();
+        renderCategories();
+        renderProducts();
+        updateCart();
+    </script>
+</body>
+</html>

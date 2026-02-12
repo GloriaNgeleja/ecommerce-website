@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroShop - Admin Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .admin-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .logo::before {
+            content: "🔐";
+            margin-right: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .login-form {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            user-select: none;
+            font-size: 20px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .toggle-password:hover {
+            opacity: 1;
+        }
+
+        .security-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .security-note::before {
+            content: "⚠️";
+            font-size: 18px;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: #1e3c72;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(44, 62, 80, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .two-factor {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .two-factor-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .two-factor-code {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .two-factor-code input {
+            flex: 1;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+        }
+
+        .two-factor-resend {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .two-factor-resend a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .user-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .user-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .access-level {
+            margin-bottom: 25px;
+        }
+
+        .access-level select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .access-level select:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <span class="admin-badge">ADMIN</span>
+            <div class="logo">ElectroShop</div>
+            <div class="subtitle">Admin Portal Access</div>
+        </div>
+
+        <div class="login-form">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <div class="security-note">
+                This is a secure admin area. All access is logged and monitored.
+            </div>
+
+            <div id="loginSection">
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" placeholder="admin@electroshop.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Enter your secure password" required>
+                        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                    </div>
+                </div>
+
+                <div class="form-group access-level">
+                    <label for="accessLevel">Access Level</label>
+                    <select id="accessLevel">
+                        <option value="super">Super Admin</option>
+                        <option value="admin" selected>Admin</option>
+                        <option value="moderator">Moderator</option>
+                    </select>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Reset password</a>
+                </div>
+
+                <button class="login-btn" onclick="handleLogin()">Sign In Securely</button>
+            </div>
+
+            <div id="twoFactorSection" class="two-factor hidden">
+                <div class="two-factor-label">Enter 6-digit verification code</div>
+                <div class="two-factor-code">
+                    <input type="text" maxlength="1" id="code1" oninput="moveToNext(this, 'code2')">
+                    <input type="text" maxlength="1" id="code2" oninput="moveToNext(this, 'code3')">
+                    <input type="text" maxlength="1" id="code3" oninput="moveToNext(this, 'code4')">
+                    <input type="text" maxlength="1" id="code4" oninput="moveToNext(this, 'code5')">
+                    <input type="text" maxlength="1" id="code5" oninput="moveToNext(this, 'code6')">
+                    <input type="text" maxlength="1" id="code6" oninput="verify2FA()">
+                </div>
+                <div class="two-factor-resend">
+                    Didn't receive code? <a href="#" onclick="resendCode(); return false;">Resend</a>
+                </div>
+                <button class="login-btn" onclick="verify2FA()">Verify & Continue</button>
+            </div>
+
+            <div class="user-link">
+                <a href="user-login.html">← Back to User Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 4000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 4000);
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('password').value;
+            const accessLevel = document.getElementById('accessLevel').value;
+            const remember = document.getElementById('remember').checked;
+
+            // Basic validation
+            if (!email || !password) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            // Simulate login (replace with actual API call)
+            console.log('Admin login attempt:', { email, accessLevel, remember });
+            
+            showSuccess('Credentials verified! Sending 2FA code...');
+            
+            // Show 2FA section after 1 second
+            setTimeout(() => {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('twoFactorSection').classList.remove('hidden');
+                document.getElementById('code1').focus();
+            }, 1000);
+        }
+
+        function moveToNext(current, nextId) {
+            if (current.value.length === 1) {
+                const next = document.getElementById(nextId);
+                if (next) {
+                    next.focus();
+                }
+            }
+        }
+
+        function verify2FA() {
+            const code = ['code1', 'code2', 'code3', 'code4', 'code5', 'code6']
+                .map(id => document.getElementById(id).value)
+                .join('');
+            
+            if (code.length !== 6) {
+                showError('Please enter complete 6-digit code');
+                return;
+            }
+
+            console.log('2FA code:', code);
+            showSuccess('Authentication successful! Redirecting to dashboard...');
+            
+            // Redirect to admin dashboard after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = 'admin-dashboard.html';
+            }, 1500);
+        }
+
+        function resendCode() {
+            showSuccess('New verification code sent to your email');
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+
+        document.getElementById('adminEmail').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+
+        // Add keyboard navigation for 2FA inputs
+        document.querySelectorAll('.two-factor-code input').forEach((input, index, inputs) => {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
