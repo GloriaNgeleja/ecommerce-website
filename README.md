@@ -1,4 +1,4 @@
-###TechStore
+# TechStore
 
 A full-stack e-commerce platform for electronics with separate frontend and backend components.
 
